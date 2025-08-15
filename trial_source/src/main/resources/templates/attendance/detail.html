@@ -6,7 +6,10 @@
 <title>勤怠情報変更｜LMS</title>
 </head>
 <body>
-
+<!-- 勤怠情報の未入力がある場合ポップアップが表示される -->
+	<script th:if="${hasNotEnterCount}">
+        alert('過去日の勤怠に未入力があります。');
+    </script>
 	<!-- 完了メッセージ -->
 	<th:block th:if="${not #strings.isEmpty(message)}" id="message">
 		<div class="alert alert-info alert-dismissible fade in" role="alert">
@@ -87,6 +90,5 @@
 			return hours + ':' + minutes;
 		}
 	</script>
-
 </body>
 </html>
