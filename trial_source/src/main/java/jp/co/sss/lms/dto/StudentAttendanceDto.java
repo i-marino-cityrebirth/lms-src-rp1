@@ -20,8 +20,16 @@ public class StudentAttendanceDto {
 	private Date trainingDate;
 	/** 出勤時間 */
 	private String trainingStartTime;
+	/** 出勤時間(時) */
+	private Integer trainingStartTimeHour;
+	/** 出勤時間(分) */
+	private Integer trainingStartTimeMinute;
 	/** 退勤時間 */
 	private String trainingEndTime;
+	/** 退勤時間(時) */
+	private Integer trainingEndTimeHour;
+	/** 退勤時間(分) */
+	private Integer trainingEndTimeMinute;
 	/** 勤怠状況 */
 	private Short status;
 	/** 備考 */

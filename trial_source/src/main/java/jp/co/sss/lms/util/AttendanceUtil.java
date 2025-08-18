@@ -74,6 +74,58 @@ public class AttendanceUtil {
 	}
 
 	/**
+	 * 出勤時間を時(hour)と分(minute)に変換
+	 *
+	 * @param min 出勤時間(時)
+	 * @return 時(hour)と分(minute)に変換したクラス
+	 */
+	public TrainingTime calcTrainingStartTimeHour(int min) {
+		int hour = min / 60;
+		int minute = min % 60;
+		TrainingTime total = new TrainingTime(hour, minute);
+		return total;
+	}
+	/**
+	 * 出勤時間を時(hour)と分(minute)に変換
+	 *
+	 * @param min 出勤時間(分)
+	 * @return 時(hour)と分(minute)に変換したクラス
+	 */
+	public TrainingTime calcTrainingStartTimeMinute(int min) {
+		int hour = min / 60;
+		int minute = min % 60;
+		TrainingTime total = new TrainingTime(hour, minute);
+		return total;
+	}
+
+	/**
+	 * 退勤時間を時(hour)と分(minute)に変換
+	 *
+	 * @param min 退勤時間(時)
+	 * @return 時(hour)と分(minute)に変換したクラス
+	 */
+	public TrainingTime calcTrainingEndTimeHour(int min) {
+		int hour = min / 60;
+		int minute = min % 60;
+		TrainingTime total = new TrainingTime(hour, minute);
+		return total;
+	}
+
+	/**
+	 * 退勤時間を時(hour)と分(minute)に変換
+	 *
+	 * @param min 退勤時間(分)
+	 * @return 時(hour)と分(minute)に変換したクラス
+	 */
+	public TrainingTime calcTrainingEndTimeMinute(int min) {
+		int hour = min / 60;
+		int minute = min % 60;
+		TrainingTime total = new TrainingTime(hour, minute);
+		return total;
+	}
+
+
+	/**
 	 * 中抜け時間を時(hour)と分(minute)に変換
 	 *
 	 * @param min 中抜け時間
@@ -130,6 +182,70 @@ public class AttendanceUtil {
 
 		}
 		return map;
+	}
+
+	/**
+	 * 出勤時間(時)取得
+	 * 
+	 * @return 出勤時間
+	 */
+	public LinkedHashMap<Integer, String> setTrainingStartTimeHour() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+	    map.put(null, ""); // 空の選択肢
+
+	    for (int hour = 0; hour <= 23; hour++) {
+	        map.put(hour, hour + "時");
+	    }
+
+	    return map;
+	}
+
+	/**
+	 * 出勤時間(分)取得
+	 * 
+	 * @return 出勤時間
+	 */
+	public LinkedHashMap<Integer, String> setTrainingStartTimeMinute() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+	    map.put(null, ""); // 空の選択肢
+
+	    for (int minute = 0; minute <= 59; minute++) {
+	        map.put(minute, minute + "分");
+	    }
+
+	    return map;
+	}
+
+	/**
+	 * 退勤時間(時)取得
+	 * 
+	 * @return 退勤時間
+	 */
+	public LinkedHashMap<Integer, String> setTrainingEndTimeHour() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+	    map.put(null, ""); // 空の選択肢
+
+	    for (int hour = 0; hour <= 23; hour++) {
+	        map.put(hour, hour + "時");
+	    }
+
+	    return map;
+	}
+
+	/**
+	 * 退勤時間(分)取得
+	 * 
+	 * @return 退勤時間
+	 */
+	public LinkedHashMap<Integer, String> setTrainingEndTimeMinute() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+	    map.put(null, ""); // 空の選択肢
+
+	    for (int minute = 0; minute <= 59; minute++) {
+	        map.put(minute, minute + "分");
+	    }
+
+	    return map;
 	}
 
 	/**

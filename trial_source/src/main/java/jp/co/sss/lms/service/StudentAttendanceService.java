@@ -59,6 +59,26 @@ public class StudentAttendanceService {
 		List<AttendanceManagementDto> attendanceManagementDtoList = tStudentAttendanceMapper
 				.getAttendanceManagement(courseId, lmsUserId, Constants.DB_FLG_FALSE);
 		for (AttendanceManagementDto dto : attendanceManagementDtoList) {
+			// 出勤時間(時)を設定
+			if (dto.getTrainingStartTimeHour() != null) {
+				TrainingTime trainingStartTimeHour = attendanceUtil.calcTrainingStartTimeHour(dto.getTrainingStartTimeHour());
+				dto.setTrainingStartTimeHourValue(String.valueOf(trainingStartTimeHour));
+			}
+			// 出勤時間(分)を設定
+			if (dto.getTrainingStartTimeMinute() != null) {
+				TrainingTime trainingStartTimeMinute = attendanceUtil.calcTrainingStartTimeMinute(dto.getTrainingStartTimeMinute());
+				dto.setTrainingStartTimeMinuteValue(String.valueOf(trainingStartTimeMinute));
+			}
+			// 退勤時間(時)を設定
+			if (dto.getTrainingEndTimeHour() != null) {
+				TrainingTime trainingEndTimeHour = attendanceUtil.calcTrainingEndTimeHour(dto.getTrainingEndTimeHour());
+				dto.setTrainingEndTimeHourValue(String.valueOf(trainingEndTimeHour));
+			}
+			// 退勤時間(時)を設定
+			if (dto.getTrainingEndTimeMinute() != null) {
+				TrainingTime trainingEndTimeMinute = attendanceUtil.calcTrainingEndTimeMinute(dto.getTrainingEndTimeMinute());
+				dto.setTrainingEndTimeMinuteValue(String.valueOf(trainingEndTimeMinute));
+			}
 			// 中抜け時間を設定
 			if (dto.getBlankTime() != null) {
 				TrainingTime blankTime = attendanceUtil.calcBlankTime(dto.getBlankTime());
@@ -220,6 +240,10 @@ public class StudentAttendanceService {
 		attendanceForm.setUserName(loginUserDto.getUserName());
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+		attendanceForm.setTrainingStartTimeHour(attendanceUtil.setTrainingStartTimeHour());
+		attendanceForm.setTrainingStartTimeMinute(attendanceUtil.setTrainingStartTimeMinute());
+		attendanceForm.setTrainingEndTimeHour(attendanceUtil.setTrainingEndTimeHour());
+		attendanceForm.setTrainingEndTimeMinute(attendanceUtil.setTrainingEndTimeMinute());
 
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
