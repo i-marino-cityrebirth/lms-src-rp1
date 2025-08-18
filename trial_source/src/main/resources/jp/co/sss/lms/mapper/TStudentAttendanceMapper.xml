@@ -92,7 +92,7 @@
 		FROM t_student_attendance
 		WHERE lms_user_id = #{lmsUserId}
 		AND delete_flg = #{deleteFlg}
-		AND training_date &gt;= #{trainingDate}
+		AND training_date &lt;= #{trainingDate}
 		AND (
 			training_start_time = ''
 			OR training_end_time = ''

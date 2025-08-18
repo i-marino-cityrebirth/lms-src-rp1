@@ -23,6 +23,7 @@ import jp.co.sss.lms.util.Constants;
  */
 @Controller
 @RequestMapping("/attendance")
+
 public class AttendanceController {
 
 	@Autowired
@@ -40,7 +41,7 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/detail", method = RequestMethod.GET)
-	public String index(Model model) {
+	public String index(Model model) throws ParseException {
 
 		// 勤怠一覧の取得
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
@@ -48,7 +49,7 @@ public class AttendanceController {
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
 		//件数取得
-		int notEnterCount = studentAttendanceService.NotEnterCount(loginUserDto.getLmsUserId());
+		boolean notEnterCount = studentAttendanceService.NotEnterCount(loginUserDto.getLmsUserId());
 
 		model.addAttribute("hasNotEnterCount",notEnterCount);
 
