@@ -1,5 +1,7 @@
 package jp.co.sss.lms.form;
 
+import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -26,6 +28,14 @@ public class DailyAttendanceForm {
 	private String trainingEndTimeHour;
 	/** 退勤時間(分) */
 	private String trainingEndTimeMinute;
+	/** 出勤時間(時) */
+	private Date StartTimeHour;
+	/** 出勤時間(分) */
+	private Date StartTimeMinute;
+	/** 退勤時間(時) */
+	private Date EndTimeHour;
+	/** 退勤時間(分) */
+	private Date EndTimeMinute;
 	/** 退勤時間 */
 	private String trainingEndTime;
 	/** 中抜け時間 */

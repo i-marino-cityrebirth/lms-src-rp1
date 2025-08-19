@@ -194,7 +194,7 @@ public class AttendanceUtil {
 	    map.put(null, ""); // 空の選択肢
 
 	    for (int hour = 0; hour <= 23; hour++) {
-	        map.put(hour, hour + "時");
+	    	map.put(hour, String.format("%02d", hour));
 	    }
 
 	    return map;
@@ -210,7 +210,7 @@ public class AttendanceUtil {
 	    map.put(null, ""); // 空の選択肢
 
 	    for (int minute = 0; minute <= 59; minute++) {
-	        map.put(minute, minute + "分");
+	        map.put(minute, String.format("%02d", minute));
 	    }
 
 	    return map;
@@ -226,7 +226,7 @@ public class AttendanceUtil {
 	    map.put(null, ""); // 空の選択肢
 
 	    for (int hour = 0; hour <= 23; hour++) {
-	        map.put(hour, hour + "時");
+	    	map.put(hour, String.format("%02d", hour));
 	    }
 
 	    return map;
@@ -242,7 +242,7 @@ public class AttendanceUtil {
 	    map.put(null, ""); // 空の選択肢
 
 	    for (int minute = 0; minute <= 59; minute++) {
-	        map.put(minute, minute + "分");
+	    	map.put(minute, String.format("%02d", minute));
 	    }
 
 	    return map;

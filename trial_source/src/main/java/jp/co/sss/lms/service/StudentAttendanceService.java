@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
+import jp.co.sss.lms.dto.StudentAttendanceDto;
 import jp.co.sss.lms.entity.TStudentAttendance;
 import jp.co.sss.lms.enums.AttendanceStatusEnum;
 import jp.co.sss.lms.form.AttendanceForm;
@@ -44,6 +45,9 @@ public class StudentAttendanceService {
 	private LoginUserDto loginUserDto;
 	@Autowired
 	private TStudentAttendanceMapper tStudentAttendanceMapper;
+	@Autowired
+	private StudentAttendanceDto StudentAttendanceDto;
+
 
 	/**
 	 * 勤怠一覧情報取得
@@ -268,6 +272,26 @@ public class StudentAttendanceService {
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
 						attendanceUtil.calcBlankTime(attendanceManagementDto.getBlankTime())));
 			}
+			if (attendanceManagementDto.getTrainingStartTime() != null) {
+
+				//日付の形成
+				SimpleDateFormat HourFormat = new SimpleDateFormat("hh");
+				SimpleDateFormat MinuteFormat = new SimpleDateFormat("mm");
+
+				try {
+				Date StartTimeHour = HourFormat.parse(attendanceManagementDto.getTrainingStartTime());
+				Date StartTimeMinute = MinuteFormat.parse(attendanceManagementDto.getTrainingStartTime());
+				Date EndTimeHour = HourFormat.parse(attendanceManagementDto.getTrainingEndTime());
+				Date EndTimeMinute = MinuteFormat.parse(attendanceManagementDto.getTrainingEndTime());
+
+				dailyAttendanceForm.setStartTimeHour(StartTimeHour);
+				dailyAttendanceForm.setStartTimeMinute(StartTimeMinute);
+				dailyAttendanceForm.setEndTimeHour(EndTimeHour);
+				dailyAttendanceForm.setEndTimeMinute(EndTimeMinute);
+				} catch (ParseException e) {
+
+				}
+			}
 			dailyAttendanceForm.setStatus(String.valueOf(attendanceManagementDto.getStatus()));
 			dailyAttendanceForm.setNote(attendanceManagementDto.getNote());
 			dailyAttendanceForm.setSectionName(attendanceManagementDto.getSectionName());
@@ -280,6 +304,11 @@ public class StudentAttendanceService {
 		}
 
 		return attendanceForm;
+	}
+
+	private void SimpleDateFormat(String string) {
+		// TODO 自動生成されたメソッド・スタブ
+		
 	}
 
 	/**
