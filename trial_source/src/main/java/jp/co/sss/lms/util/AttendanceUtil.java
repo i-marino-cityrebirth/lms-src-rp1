@@ -249,6 +249,31 @@ public class AttendanceUtil {
 	}
 
 	/**
+	 * 時間と分をわける
+	 * 
+	 * @return
+	 */
+	public int[] TimeSplit (String time){
+
+		if(time != null && time != "") {
+			// ":"で分割
+			String[] parts = time.split(":"); 
+
+			try {
+				// 数字に変換
+				int hour = Integer.parseInt(parts[0]), minute = Integer.parseInt(parts[1]);
+				// 範囲が妥当なら新しいリストを返却
+				if (0 <= hour && hour <= 23 && 0 <= minute && minute <= 59)
+
+					return new int[]{hour, minute};
+			}catch(NumberFormatException e){
+			}
+		}
+		return null;
+	}
+
+
+	/**
 	 * 研修日の判定
 	 * 
 	 * @param courseId

@@ -49,27 +49,27 @@
 								<td class="w300">[[${dailyAttendanceForm.sectionName}]]</td>
 								<td class="w240">
 									<div class="form-inline">
-										<select th:name="|attendanceList[${stat.index}].trainingStartTimeHour|" class="form-control">
-											<option th:each="trainingStartTimeHour : ${attendanceForm.trainingStartTimeHour}" th:value="${StartTimeHour.key}" th:inline="text" 
-												th:selected="${trainingStartTimeHour.key == dailyAttendanceForm.trainingStartTimeHour}">[[${trainingStartTimeHour.value}]]</option>
+										<select th:name="|attendanceList[${stat.index}].StartTimeHour|" class="form-control">
+											<option th:each="trainingStartTimeHour : ${attendanceForm.trainingStartTimeHour}" th:value="${trainingStartTimeHour.key}" th:inline="text" 
+												th:selected="${trainingStartTimeHour.key == dailyAttendanceForm.StartTimeHour}">[[${trainingStartTimeHour.value}]]</option>
 										</select>
 										<span>:</span>
-										<select th:name="|attendanceList[${stat.index}].trainingStartTimeMinute|" class="form-control">
-											<option th:each="trainingStartTimeMinute : ${attendanceForm.trainingStartTimeMinute}" th:value="${StartTimeMinute.key}" th:inline="text"
-												th:selected="${trainingStartTimeMinute.key == dailyAttendanceForm.trainingStartTimeMinute}">[[${trainingStartTimeMinute.value}]]</option>
+										<select th:name="|attendanceList[${stat.index}].StartTimeMinute|" class="form-control">
+											<option th:each="trainingStartTimeMinute : ${attendanceForm.trainingStartTimeMinute}" th:value="${trainingStartTimeMinute.key}" th:inline="text"
+												th:selected="${trainingStartTimeMinute.key == dailyAttendanceForm.StartTimeMinute}">[[${trainingStartTimeMinute.value}]]</option>
 										</select>
 									</div>
 								</td>
 								<td class="w240">
 									<div class="form-inline">
-										<select th:name="|attendanceList[${stat.index}].trainingEndTimeHour|" class="form-control">
-											<option th:each="trainingEndTimeHour : ${attendanceForm.trainingEndTimeHour}" th:value="${EndTimeHour.key}" th:inline="text"
-												th:selected="${trainingEndTimeHour.key == dailyAttendanceForm.trainingEndTimeHour}">[[${trainingEndTimeHour.value}]]</option>
+										<select th:name="|attendanceList[${stat.index}].EndTimeHour|" class="form-control">
+											<option th:each="trainingEndTimeHour : ${attendanceForm.trainingEndTimeHour}" th:value="${trainingEndTimeHour.key}" th:inline="text"
+												th:selected="${trainingEndTimeHour.key == dailyAttendanceForm.EndTimeHour}">[[${trainingEndTimeHour.value}]]</option>
 										</select>
 										<span>:</span>
-										<select th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|" class="form-control">
-											<option th:each="trainingEndTimeMinute : ${attendanceForm.trainingEndTimeMinute}" th:value="${EndTimeMinute.key}" th:inline="text" 
-												th:selected="${trainingEndTimeMinute.key == dailyAttendanceForm.trainingEndTimeMinute}">[[${trainingEndTimeMinute.value}]]</option>
+										<select th:name="|attendanceList[${stat.index}].EndTimeMinute|" class="form-control">
+											<option th:each="trainingEndTimeMinute : ${attendanceForm.trainingEndTimeMinute}" th:value="${trainingEndTimeMinute.key}" th:inline="text" 
+												th:selected="${trainingEndTimeMinute.key == dailyAttendanceForm.EndTimeMinute}">[[${trainingEndTimeMinute.value}]]</option>
 										</select>
 									</div>
 								</td>

@@ -272,26 +272,23 @@ public class StudentAttendanceService {
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
 						attendanceUtil.calcBlankTime(attendanceManagementDto.getBlankTime())));
 			}
-			if (attendanceManagementDto.getTrainingStartTime() != null) {
+//Task26
+				int[] startTime = attendanceUtil.TimeSplit(attendanceManagementDto.getTrainingStartTime());
+				int[] EndTime = attendanceUtil.TimeSplit(attendanceManagementDto.getTrainingEndTime());
 
-				//日付の形成
-				SimpleDateFormat HourFormat = new SimpleDateFormat("hh");
-				SimpleDateFormat MinuteFormat = new SimpleDateFormat("mm");
+				if (startTime != null) {
 
-				try {
-				Date StartTimeHour = HourFormat.parse(attendanceManagementDto.getTrainingStartTime());
-				Date StartTimeMinute = MinuteFormat.parse(attendanceManagementDto.getTrainingStartTime());
-				Date EndTimeHour = HourFormat.parse(attendanceManagementDto.getTrainingEndTime());
-				Date EndTimeMinute = MinuteFormat.parse(attendanceManagementDto.getTrainingEndTime());
-
-				dailyAttendanceForm.setStartTimeHour(StartTimeHour);
-				dailyAttendanceForm.setStartTimeMinute(StartTimeMinute);
-				dailyAttendanceForm.setEndTimeHour(EndTimeHour);
-				dailyAttendanceForm.setEndTimeMinute(EndTimeMinute);
-				} catch (ParseException e) {
-
+				dailyAttendanceForm.setStartTimeHour(startTime[0]);
+				dailyAttendanceForm.setStartTimeMinute(startTime[1]);
 				}
-			}
+
+				if (EndTime != null) {
+
+					dailyAttendanceForm.setEndTimeHour(EndTime[0]);
+					dailyAttendanceForm.setEndTimeMinute(EndTime[1]);
+					}
+				
+//Task26
 			dailyAttendanceForm.setStatus(String.valueOf(attendanceManagementDto.getStatus()));
 			dailyAttendanceForm.setNote(attendanceManagementDto.getNote());
 			dailyAttendanceForm.setSectionName(attendanceManagementDto.getSectionName());
