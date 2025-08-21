@@ -86,13 +86,14 @@
 		WHERE student_attendance_id = #{studentAttendanceId}
 	</update>
 
+<!-- Task25 -->
 <!-- 過去日未入力取得 -->
 	<select id="notEnterCount" resultType="java.lang.Integer">
 		SELECT COUNT(*) 
 		FROM t_student_attendance
 		WHERE lms_user_id = #{lmsUserId}
 		AND delete_flg = #{deleteFlg}
-		AND training_date &lt;= #{trainingDate}
+		AND training_date &lt; #{trainingDate}
 		AND (
 			training_start_time = ''
 			OR training_end_time = ''
@@ -100,4 +101,5 @@
 			OR training_end_time IS NULL
 			)
 	</select>
+<!-- Task25 -->
 </mapper>
