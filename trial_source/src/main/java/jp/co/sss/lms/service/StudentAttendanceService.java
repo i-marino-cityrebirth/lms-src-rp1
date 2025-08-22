@@ -346,12 +346,22 @@ public class StudentAttendanceService {
 			tStudentAttendance.setAccountId(loginUserDto.getAccountId());
 			// 出勤時刻整形
 			TrainingTime trainingStartTime = null;
-			trainingStartTime = new TrainingTime(dailyAttendanceForm.getTrainingStartTime());
+			if(dailyAttendanceForm.getStartTimeHour() != null && dailyAttendanceForm.getStartTimeMinute() != null) {
+			dailyAttendanceForm.setTrainingStartTime(dailyAttendanceForm.getStartTimeHour() + ":" +dailyAttendanceForm.getStartTimeMinute());
+			trainingStartTime = new TrainingTime(dailyAttendanceForm.getTrainingStartTime());	
 			tStudentAttendance.setTrainingStartTime(trainingStartTime.getFormattedString());
+			} else {
+				tStudentAttendance.setTrainingStartTime("");
+			}
 			// 退勤時刻整形
 			TrainingTime trainingEndTime = null;
+			if(dailyAttendanceForm.getEndTimeHour() != null && dailyAttendanceForm.getEndTimeMinute() != null) {
+				dailyAttendanceForm.setTrainingEndTime(dailyAttendanceForm.getEndTimeHour() + ":" +dailyAttendanceForm.getEndTimeMinute());
 			trainingEndTime = new TrainingTime(dailyAttendanceForm.getTrainingEndTime());
 			tStudentAttendance.setTrainingEndTime(trainingEndTime.getFormattedString());
+			} else {
+				tStudentAttendance.setTrainingEndTime("");
+			}
 			// 中抜け時間
 			tStudentAttendance.setBlankTime(dailyAttendanceForm.getBlankTime());
 			// 遅刻早退ステータス
@@ -385,6 +395,7 @@ public class StudentAttendanceService {
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
 	}
 
+//Task25
 	// StudentAttendanceService.java の getNotEnterCount メソッド内
 	public boolean NotEnterCount(Integer lmsUserId) throws ParseException{
 
@@ -401,5 +412,5 @@ public class StudentAttendanceService {
 		}
 		return check;
 	}
-
+//Task25
 }
