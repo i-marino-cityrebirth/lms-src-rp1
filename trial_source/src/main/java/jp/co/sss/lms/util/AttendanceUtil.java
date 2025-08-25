@@ -184,6 +184,7 @@ public class AttendanceUtil {
 		return map;
 	}
 
+//Task26
 	/**
 	 * 出勤時間(時)取得
 	 * 
@@ -271,7 +272,7 @@ public class AttendanceUtil {
 		}
 		return null;
 	}
-
+//Task26
 
 	/**
 	 * 研修日の判定
