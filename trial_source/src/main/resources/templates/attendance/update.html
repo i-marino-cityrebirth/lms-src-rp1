@@ -17,11 +17,19 @@
 			<h2><small>途中退校日：${dispLeaveDate}</small></h2>
 		</th:block>
 	</th:block>
-
+<!-- Task27 -->
+<!--	 エラーメッセージ -->
+	<th:block th:if="${errorCount != 0}" id="error">
+		<ul style="padding-left: 0; list-style: none;" th:each="errors :${errorList}">
+			<li th:if="${errors != null}"><span th:text="'*' + '&nbsp' + ${errors}" class="help-inline error"></span>
+			</li>
+		</ul>
+	</th:block>
+<!-- Task27 -->
 	<div class="row">
 		<div class="bs-component col-sm-12">
 
-			<form th:action="@{/attendance/update}" method="post">
+			<form th:action="@{/attendance/update}" method="post" onsubmit="return confirmSubmit();" th:object="${attendanceForm}">
 				<table class="table table-hover dataTable no-footer">
 					<thead>
 						<tr>
@@ -53,7 +61,7 @@
 											<option th:each="trainingStartTimeHour : ${attendanceForm.trainingStartTimeHour}" th:value="${trainingStartTimeHour.key}" th:inline="text" 
 												th:selected="${trainingStartTimeHour.key == dailyAttendanceForm.StartTimeHour}">[[${trainingStartTimeHour.value}]]</option>
 										</select>
-										<span>:</span>
+										<span>：</span>
 										<select th:name="|attendanceList[${stat.index}].StartTimeMinute|" class="form-control">
 											<option th:each="trainingStartTimeMinute : ${attendanceForm.trainingStartTimeMinute}" th:value="${trainingStartTimeMinute.key}" th:inline="text"
 												th:selected="${trainingStartTimeMinute.key == dailyAttendanceForm.StartTimeMinute}">[[${trainingStartTimeMinute.value}]]</option>
@@ -66,7 +74,7 @@
 											<option th:each="trainingEndTimeHour : ${attendanceForm.trainingEndTimeHour}" th:value="${trainingEndTimeHour.key}" th:inline="text"
 												th:selected="${trainingEndTimeHour.key == dailyAttendanceForm.EndTimeHour}">[[${trainingEndTimeHour.value}]]</option>
 										</select>
-										<span>:</span>
+										<span>：</span>
 										<select th:name="|attendanceList[${stat.index}].EndTimeMinute|" class="form-control">
 											<option th:each="trainingEndTimeMinute : ${attendanceForm.trainingEndTimeMinute}" th:value="${trainingEndTimeMinute.key}" th:inline="text" 
 												th:selected="${trainingEndTimeMinute.key == dailyAttendanceForm.EndTimeMinute}">[[${trainingEndTimeMinute.value}]]</option>
@@ -97,10 +105,16 @@
 					</th:block>
 					<input type="submit" value="更新" name="complete" class="btn btn-info" />
 				</div>
-
 			</form>
 		</div>
 	</div>
 
+<!--Task27 -->
+	<script>
+		function confirmSubmit() {
+			return confirm("更新します。よろしいですか？");
+		}
+	</script>
+<!--Task27 -->
 </body>
 </html>

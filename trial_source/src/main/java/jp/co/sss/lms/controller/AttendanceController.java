@@ -48,11 +48,12 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
+//Task25
 		//件数取得
 		boolean notEnterCount = studentAttendanceService.NotEnterCount(loginUserDto.getLmsUserId());
 
 		model.addAttribute("hasNotEnterCount",notEnterCount);
-
+//Task25
 		return "attendance/detail";
 	}
 
@@ -138,6 +139,16 @@ public class AttendanceController {
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
+
+//Task27
+		//更新前チェック
+		result = studentAttendanceService.updateCheck(attendanceForm, result);
+		if (attendanceForm.getErrorList() != null) {
+			model.addAttribute("errorList", attendanceForm.getErrorList());
+		}
+		System.out.println(result.getObjectName());
+		System.out.println(result.getErrorCount());
+		model.addAttribute("errorCount", result.getErrorCount());
 
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);

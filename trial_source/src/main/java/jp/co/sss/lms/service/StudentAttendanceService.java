@@ -4,11 +4,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
@@ -344,6 +350,8 @@ public class StudentAttendanceService {
 			}
 			tStudentAttendance.setLmsUserId(lmsUserId);
 			tStudentAttendance.setAccountId(loginUserDto.getAccountId());
+
+//Task26
 			// 出勤時刻整形
 			TrainingTime trainingStartTime = null;
 			if(dailyAttendanceForm.getStartTimeHour() != null && dailyAttendanceForm.getStartTimeMinute() != null) {
@@ -362,6 +370,7 @@ public class StudentAttendanceService {
 			} else {
 				tStudentAttendance.setTrainingEndTime("");
 			}
+//Task26
 			// 中抜け時間
 			tStudentAttendance.setBlankTime(dailyAttendanceForm.getBlankTime());
 			// 遅刻早退ステータス
@@ -413,4 +422,58 @@ public class StudentAttendanceService {
 		return check;
 	}
 //Task25
+	@Autowired
+	private MessageSource messageSource;
+
+	/**
+	 * 更新前チェック
+	 * 
+	 * @param attendanceForm
+	 * @return 完了メッセージ
+	 * @throws ParseException
+	 */
+	public BindingResult updateCheck(AttendanceForm attendanceForm, BindingResult result) throws ParseException {
+		//エラーメッセージを配列を使って格納
+				Set<String> errorList = new HashSet<>();
+				Integer startHour = null;
+				Integer startMinute = null;
+				Integer endHour = null;
+				Integer endMinute = null;
+
+				//今日の日付
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+				Date trainingDate = sdf.parse(sdf.format(new Date()));
+
+				for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+					//フォーム内の日付
+					Date date = sdf.parse(dailyAttendanceForm.getTrainingDate());
+
+					//日付が当日よりも前の場合
+					if ((date.compareTo(trainingDate)) == -1) {
+						if (dailyAttendanceForm.getStartTimeHour() != null) {
+							startHour = dailyAttendanceForm.getStartTimeHour();
+						}
+						if (dailyAttendanceForm.getStartTimeMinute() != null) {
+							startMinute = dailyAttendanceForm.getStartTimeMinute();
+						}
+						if (dailyAttendanceForm.getEndTimeHour() != null) {
+							endHour = dailyAttendanceForm.getEndTimeHour();
+						}
+						if (dailyAttendanceForm.getEndTimeMinute() != null) {
+							endMinute = dailyAttendanceForm.getEndTimeMinute();
+						}
+					}
+					//備考欄の文字数制限
+					if (dailyAttendanceForm.getNote().length() > 100) {
+						String[] str = { messageSource.getMessage("placeNote", new String[] {}, Locale.getDefault()),
+								"100" };
+						String error = messageUtil.getMessage(Constants.VALID_KEY_MAXLENGTH, str);
+						FieldError fieldError = new FieldError(result.getObjectName(), "note", error);
+						result.addError(fieldError);
+						errorList.add(error);
+					}
+				}
+				attendanceForm.setErrorList(errorList);
+				return result;
+	}
 }
