@@ -425,26 +425,32 @@ public class StudentAttendanceService {
 	@Autowired
 	private MessageSource messageSource;
 
+//Task27 START
 	/**
 	 * 更新前チェック
 	 * 
-	 * @param attendanceForm
-	 * @return 完了メッセージ
+	 * @param attendanceForm, bindingResult
+	 * @return エラーメッセージ
 	 * @throws ParseException
 	 */
-	public BindingResult updateCheck(AttendanceForm attendanceForm, BindingResult result) throws ParseException {
+	public BindingResult updateCheck(AttendanceForm attendanceForm, BindingResult bindingResult) throws ParseException {
 		//エラーメッセージを配列を使って格納
 				Set<String> errorList = new HashSet<>();
-				Integer startHour = null;
-				Integer startMinute = null;
-				Integer endHour = null;
-				Integer endMinute = null;
+
 
 				//今日の日付
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 				Date trainingDate = sdf.parse(sdf.format(new Date()));
 
+				Integer index = 0;
+
 				for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+
+					Integer startHour = null;
+					Integer startMinute = null;
+					Integer endHour = null;
+					Integer endMinute = null;
+
 					//フォーム内の日付
 					Date date = sdf.parse(dailyAttendanceForm.getTrainingDate());
 
@@ -464,16 +470,103 @@ public class StudentAttendanceService {
 						}
 					}
 					//備考欄の文字数制限
-					if (dailyAttendanceForm.getNote().length() > 100) {
+					if (dailyAttendanceForm.getNote().length() >= 100) {
 						String[] str = { messageSource.getMessage("placeNote", new String[] {}, Locale.getDefault()),
 								"100" };
 						String error = messageUtil.getMessage(Constants.VALID_KEY_MAXLENGTH, str);
-						FieldError fieldError = new FieldError(result.getObjectName(), "note", error);
-						result.addError(fieldError);
+						FieldError fieldError = new FieldError(bindingResult.getObjectName(), "note", error);
+						bindingResult.addError(fieldError);
 						errorList.add(error);
+					}
+
+					//出勤時間の片方だけ入力があるとき
+					if (startHour == null && startMinute != null) {
+						String[] str = {"出勤時間"};
+						String error = messageUtil.getMessage(Constants.INPUT_INVALID, str);
+						FieldError fieldError = new FieldError(bindingResult.getObjectName(), "attendanceList[" + index + "].StartTimeHour", error);
+						bindingResult.addError(fieldError);
+						errorList.add(error);
+					}
+					if (startHour != null && startMinute == null) {
+						String[] str = {"出勤時間"};
+						String error = messageUtil.getMessage(Constants.INPUT_INVALID, str);
+						FieldError fieldError = new FieldError(bindingResult.getObjectName(), "attendanceList[" + index + "].StartTimeMinute", error);
+						bindingResult.addError(fieldError);
+						errorList.add(error);
+					}
+
+					//退勤時間の片方だけ入力があるとき
+					if (endHour == null && endMinute != null) {
+						String[] str = {"出勤時間"};
+						String error = messageUtil.getMessage(Constants.INPUT_INVALID, str);
+						FieldError fieldError = new FieldError(bindingResult.getObjectName(), "attendanceList[" + index + "].EndTimeHour", error);
+						bindingResult.addError(fieldError);
+						errorList.add(error);
+					}
+					if (endHour != null && endMinute == null) {
+						String[] str = {"退勤時間"};
+						String error = messageUtil.getMessage(Constants.INPUT_INVALID, str);
+						FieldError fieldError = new FieldError(bindingResult.getObjectName(), "attendanceList[" + index + "].EndTimeMinute", error);
+						bindingResult.addError(fieldError);
+						errorList.add(error);
+					}
+
+					//退勤時間のみ入力あり
+					if (startHour == null && startMinute == null && endHour != null && endMinute != null) {
+						String error = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY);
+						FieldError fieldError = new FieldError(bindingResult.getObjectName(), "EndOnly", error);
+						bindingResult.addError(fieldError);
+						errorList.add(error);
+					}
+
+					//出勤時間が退勤時間を超えるとき
+					if (startHour != null && startMinute != null && endHour != null && endMinute != null) {
+						Integer startTime = startHour*100+startMinute;
+						Integer endTime = endHour*100+ endMinute;
+
+						if (endTime-startTime < 0) {
+							Integer listN = attendanceForm.getAttendanceList().size();
+							String[] list = { String.valueOf(listN) };
+							String error = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, list);
+							FieldError fieldError = new FieldError(bindingResult.getObjectName(), "EndOnly", error);
+							bindingResult.addError(fieldError);
+							errorList.add(error);
+						}
+					}
+					//中抜け時間が勤務時間を超えるとき
+					if (startHour != null && startMinute != null && endHour != null && endMinute != null) {
+						Integer startTime = startHour*100+startMinute;
+						Integer endTime = endHour*100+ endMinute;
+
+						if (endTime-startTime < 0) {
+							Integer listN = attendanceForm.getAttendanceList().size();
+							String[] list = { String.valueOf(listN) };
+							String error = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, list);
+							FieldError fieldError = new FieldError(bindingResult.getObjectName(), "EndOnly", error);
+							bindingResult.addError(fieldError);
+							errorList.add(error);
+						}
 					}
 				}
 				attendanceForm.setErrorList(errorList);
-				return result;
+				return bindingResult;
 	}
+
+	/**
+	 * 勤怠フォームへ設定
+	 * 
+	 * @param attendanceManagementDtoList
+	 * @return 勤怠編集フォーム
+	 */
+	public AttendanceForm attendanceUpdate(AttendanceForm attendanceForm) {
+
+		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
+		attendanceForm.setTrainingStartTimeHour(attendanceUtil.setTrainingStartTimeHour());
+		attendanceForm.setTrainingStartTimeMinute(attendanceUtil.setTrainingStartTimeMinute());
+		attendanceForm.setTrainingEndTimeHour(attendanceUtil.setTrainingEndTimeHour());
+		attendanceForm.setTrainingEndTimeMinute(attendanceUtil.setTrainingEndTimeMinute());
+
+		return attendanceForm;
+	}
+//Task27 END
 }

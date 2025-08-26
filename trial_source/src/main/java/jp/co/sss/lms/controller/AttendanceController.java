@@ -140,7 +140,7 @@ public class AttendanceController {
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
 
-//Task27
+//Task27 START
 		//更新前チェック
 		result = studentAttendanceService.updateCheck(attendanceForm, result);
 		if (attendanceForm.getErrorList() != null) {
@@ -150,15 +150,28 @@ public class AttendanceController {
 		System.out.println(result.getErrorCount());
 		model.addAttribute("errorCount", result.getErrorCount());
 
-		// 更新
-		String message = studentAttendanceService.update(attendanceForm);
-		model.addAttribute("message", message);
-		// 一覧の再取得
-		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
-				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
-		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+		if (result.hasErrors()) {
+			// 一覧の再取得
+			List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
+					.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+			model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
-		return "attendance/detail";
+			//勤怠フォームの生成
+			attendanceForm = studentAttendanceService
+					.attendanceUpdate(attendanceForm);
+			model.addAttribute("attendanceForm", attendanceForm);
+			return "attendance/update";
+		} else {
+			// 更新
+			String message = studentAttendanceService.update(attendanceForm);
+			model.addAttribute("message", message);
+			// 一覧の再取得
+			List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
+					.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
+			model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
+			return "attendance/detail";
+		}
 	}
+//Task27 END
 
 }
