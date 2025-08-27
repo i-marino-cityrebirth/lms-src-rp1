@@ -528,25 +528,28 @@ public class StudentAttendanceService {
 							Integer listN = attendanceForm.getAttendanceList().size();
 							String[] list = { String.valueOf(listN) };
 							String error = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, list);
-							FieldError fieldError = new FieldError(bindingResult.getObjectName(), "EndOnly", error);
+							FieldError fieldError = new FieldError(bindingResult.getObjectName(), "trainingTimeOver", error);
 							bindingResult.addError(fieldError);
 							errorList.add(error);
 						}
 					}
-					//中抜け時間が勤務時間を超えるとき
-					if (startHour != null && startMinute != null && endHour != null && endMinute != null) {
-						Integer startTime = startHour*100+startMinute;
-						Integer endTime = endHour*100+ endMinute;
 
-						if (endTime-startTime < 0) {
-							Integer listN = attendanceForm.getAttendanceList().size();
-							String[] list = { String.valueOf(listN) };
-							String error = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_TRAININGTIMERANGE, list);
-							FieldError fieldError = new FieldError(bindingResult.getObjectName(), "EndOnly", error);
-							bindingResult.addError(fieldError);
-							errorList.add(error);
-						}
+					//中抜け時間が勤務時間を超えるとき
+					int hour;
+					int minute;
+					int trainingMinute = 0;
+					if (startHour != null && startMinute != null && endHour != null && endMinute != null) {
+						hour = (endHour - startHour) * 60;
+						minute = endMinute - startMinute;
+						trainingMinute = hour + minute;
 					}
+					if (dailyAttendanceForm.getBlankTime() != null && trainingMinute < dailyAttendanceForm.getBlankTime()) {
+						String error = messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_BLANKTIMEERROR);
+						FieldError fieldError = new FieldError(bindingResult.getObjectName(), "blankTime", error);
+						bindingResult.addError(fieldError);
+						errorList.add(error);
+					}
+					index++;
 				}
 				attendanceForm.setErrorList(errorList);
 				return bindingResult;
