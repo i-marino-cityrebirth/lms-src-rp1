@@ -558,8 +558,8 @@ public class StudentAttendanceService {
 	/**
 	 * 勤怠フォームへ設定
 	 * 
-	 * @param attendanceManagementDtoList
-	 * @return 勤怠編集フォーム
+	 * @param attendanceForm
+	 * @return 勤怠フォーム
 	 */
 	public AttendanceForm attendanceUpdate(AttendanceForm attendanceForm) {
 
